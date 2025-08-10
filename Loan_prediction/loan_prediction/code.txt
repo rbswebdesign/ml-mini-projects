@@ -1,1 +1,51 @@
+import pandas as pd
+from sklearn import preprocessing
+import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import VotingClassifier
+ds=pd.read_csv("C:\\Users\\ss\\Downloads\\archive\\loan_approval_dataset.csv")
+ds.columns
+s=[" education",' self_employed'," loan_status"]
+enc=preprocessing.LabelEncoder()
+for i in s:
+    ds[i]=enc.fit_transform(ds[i])
+X=ds.drop(' loan_status',axis=1)
+Y=ds[' loan_status']
+model_svc=SVC()
+x_train,x_test,y_train,y_test=train_test_split(X,Y,test_size=0.3)
+model_svc.fit(x_train,y_train)
+pred_1=model_svc.predict(x_test)
+accuracy_score(pred_1,y_test)*100
+#61.82669789227167
+model_lr=LogisticRegression()
+model_lr.fit(x_train,y_train)
+pred_2=model_lr.predict(x_test)
+accuracy_score(pred_2,y_test)*100
+#73.84855581576893
+model_gb=GaussianNB()
+model_gb.fit(x_train,y_train)
+pred_3=model_gb.predict(x_test)
+accuracy_score(pred_3,y_test)*100
+#74.08274785323967
+model_vc = VotingClassifier(estimators=[("m1", model_svc), ('m2', model_lr), ("m3", model_gb)], voting='hard')
+model_vc.fit(x_train,y_train)
+model_vc.fit(x_train,y_train)
+accuracy_score(pred_4,y_test)*100
+#66.51053864168618
+model_dt=DecisionTreeClassifier()
+model_dt.fit(x_train,y_train)
+pred_6=model_dt.predict(x_test)
+accuracy_score(pred_6,y_test)*100
+#97.97033567525371
+model_rf=RandomForestClassifier()
+model_rf.fit(x_train,y_train)
+pred_5=model_rf.predict(x_test)
+accuracy_score(pred_5,y_test)*100
+#98.28259172521467
 
